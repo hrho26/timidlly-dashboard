@@ -2,7 +2,6 @@ import { createClient } from "@/lib/supabase/server";
 import { PlatformStats } from "@/components/PlatformStats";
 import { LeadPipeline } from "@/components/LeadPipeline";
 import { PricingAssistant } from "@/components/PricingAssistant";
-import { DeliverableTracker } from "@/components/DeliverableTracker";
 import { SignOutButton } from "@/components/SignOutButton";
 
 export default async function Home() {
@@ -32,10 +31,7 @@ export default async function Home() {
 
       <main className="mx-auto max-w-6xl space-y-6 px-6 py-8">
         <PlatformStats />
-        <div className="grid gap-6 lg:grid-cols-2">
-          <PricingAssistant />
-          <DeliverableTracker />
-        </div>
+        <PricingAssistant />
         <LeadPipeline />
       </main>
     </div>

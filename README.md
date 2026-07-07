@@ -1,8 +1,9 @@
 # Timidlly Media-Kit Dashboard
 
-Conversion-track dashboard (Hyeonseok's Week 2–8 project): platform baseline
-stats, a lead pipeline scored by pitch fit, a pricing assistant, and a
-deliverable tracker against the cohort playbook.
+Media-kit dashboard for the team to track sponsorship readiness: platform
+baseline stats, a lead pipeline scored by pitch fit, and a pricing
+assistant. (No personal deliverable-tracking — this is a shared team tool,
+not an individual task list.)
 
 Repo: https://github.com/hrho26/timidlly-dashboard (private)
 
@@ -63,10 +64,12 @@ account creation needed.
 
 ## Data
 
-- `data/prospects.ts` — the 20-prospect lead pipeline seeded from the sales
-  team's CSV/DOCX handoff, scored 1–10 by audience overlap, contact
-  quality, and urgency fit. Move this into a Supabase table once outreach
-  starts, so status updates persist and don't require a redeploy.
+- `data/prospects.ts` — 69-prospect lead pipeline: 20 from the sales team's
+  CSV (uniform "dual_impact" package) plus 49 from the detailed prospect
+  docx (Autumn AI through Decagon, each with a real Apollo-sourced contact
+  and a tailored recommended package). Scored 1–10 by audience overlap,
+  contact quality, and urgency fit. Move this into a Supabase table once
+  outreach starts, so status updates persist and don't require a redeploy.
 - `data/platform-stats.ts` — Week 2 baseline, pulled from
   `Hyeonseok-baseline-stats.xlsx` (the actual deliverable spreadsheet, not an
   estimate). Follower counts are real: Instagram 10,000, LinkedIn 3,999,
