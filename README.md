@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Timidlly Media-Kit Dashboard
 
-## Getting Started
+Conversion-track dashboard (Hyeonseok's Week 2–8 project): platform baseline
+stats, a lead pipeline scored by pitch fit, a pricing assistant, and a
+deliverable tracker against the cohort playbook.
 
-First, run the development server:
+Repo: https://github.com/hrho26/timidlly-dashboard (private)
+
+## Stack
+
+- Next.js 16 (App Router, TypeScript, Tailwind)
+- Supabase (Postgres + email-link auth)
+- Vercel (hosting)
+
+## Local setup
 
 ```bash
+npm install
+cp .env.local.example .env.local   # then fill in real values, see below
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Without real Supabase values, the app still runs — you'll land on `/login`
+and see the form render, but sign-in won't work until Supabase is connected.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 1. Create the Supabase project
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Go to [supabase.com](https://supabase.com) → New Project.
+2. Once created, go to **Settings → API** and copy:
+   - `Project URL` → `NEXT_PUBLIC_SUPABASE_URL`
+   - `anon public` key → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+3. Paste both into `.env.local`.
+4. In **Authentication → Providers**, confirm "Email" is enabled and
+   "Confirm email" uses a magic link (OTP), which is the default.
+5. In **Authentication → Email Templates → Magic Link**, make sure the link
+   uses `{{ .TokenHash }}` in the `token_hash` query param (Supabase's
+   default template already does this) — that's what
+   `app/auth/confirm/route.ts` expects.
+6. Set `ALLOWED_EMAILS` in `.env.local` to a comma-separated list of every
+   email that should be able to see the dashboard (you, coach, teammates).
+   Leaving it empty allows anyone who signs in — don't ship that to
+   production.
 
-## Learn More
+## 2. Deploy to Vercel
 
-To learn more about Next.js, take a look at the following resources:
+1. Go to [vercel.com/new](https://vercel.com/new) and import
+   `hrho26/timidlly-dashboard` from GitHub.
+2. In the import screen, add the same three environment variables from
+   `.env.local` (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
+   `ALLOWED_EMAILS`).
+3. Deploy. Vercel gives you a URL like
+   `timidlly-dashboard.vercel.app` — that's the live link to share.
+4. Back in Supabase → **Authentication → URL Configuration**, add that
+   Vercel URL to both "Site URL" and "Redirect URLs" (e.g.
+   `https://timidlly-dashboard.vercel.app/auth/confirm`), or magic links
+   won't redirect correctly in production.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 3. Invite people
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Anyone whose email is in `ALLOWED_EMAILS` can go to the Vercel URL, enter
+their email, and click the magic link sent to their inbox — no separate
+account creation needed.
 
-## Deploy on Vercel
+## Data
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `data/prospects.ts` — the 20-prospect lead pipeline seeded from the sales
+  team's CSV/DOCX handoff, scored 1–10 by audience overlap, contact
+  quality, and urgency fit. Move this into a Supabase table once outreach
+  starts, so status updates persist and don't require a redeploy.
+- `data/platform-stats.ts` — Week 2 baseline. Only Newsletter (18K) and
+  LinkedIn (10K+) have confirmed numbers from the source docs; Instagram
+  and X still need a real pull before the Week 2 deliverable is complete.
+- `data/pricing.ts` — only Newsletter ($199) and LinkedIn Post ($500) are
+  confirmed prices; everything else is marked "Custom quote" rather than a
+  guessed number.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Known gaps before this is a real Week 3+ deliverable
+
+- Data is hardcoded in `.ts` files, not read from Supabase — fine for a
+  skeleton, but the Week 3 task ("connect the first live data source")
+  means wiring at least one of these to a live table or API.
+- No automated IG/X follower pulls yet (would need each platform's API).
