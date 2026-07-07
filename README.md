@@ -67,9 +67,16 @@ account creation needed.
   team's CSV/DOCX handoff, scored 1–10 by audience overlap, contact
   quality, and urgency fit. Move this into a Supabase table once outreach
   starts, so status updates persist and don't require a redeploy.
-- `data/platform-stats.ts` — Week 2 baseline. Only Newsletter (18K) and
-  LinkedIn (10K+) have confirmed numbers from the source docs; Instagram
-  and X still need a real pull before the Week 2 deliverable is complete.
+- `data/platform-stats.ts` — Week 2 baseline, pulled from
+  `Hyeonseok-baseline-stats.xlsx` (the actual deliverable spreadsheet, not an
+  estimate). Follower counts are real: Instagram 10,000, LinkedIn 3,999,
+  X 473. Every interaction metric (likes, comments, engagement rate, etc.)
+  was pulled from **one sample post per platform**, not averaged across post
+  history — the UI labels these "(1 post)" and shows an amber caveat so this
+  doesn't get mistaken for a trend. Newsletter subscriber count hasn't been
+  pulled at all yet (still blank in the source sheet). Re-extract this file
+  whenever the spreadsheet is updated with more sample posts or a real
+  newsletter count.
 - `data/pricing.ts` — only Newsletter ($199) and LinkedIn Post ($500) are
   confirmed prices; everything else is marked "Custom quote" rather than a
   guessed number.
