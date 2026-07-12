@@ -5,7 +5,7 @@ baseline stats, a lead pipeline scored by pitch fit, and a pricing
 assistant. (No personal deliverable-tracking — this is a shared team tool,
 not an individual task list.)
 
-Repo: https://github.com/hrho26/timidlly-dashboard (private)
+Repo: https://github.com/hrho26/timidlly-dashboard (public)
 
 ## Stack
 
@@ -84,9 +84,24 @@ account creation needed.
   confirmed prices; everything else is marked "Custom quote" rather than a
   guessed number.
 
+## Current status
+
+- **Code**: complete and building clean (`npm run build` passes, no type
+  errors). Auth gate (`proxy.ts` → `lib/supabase/middleware.ts`) is wired up
+  and redirects unauthenticated visitors to `/login`.
+- **Blocked on external accounts, not code**: sign-in doesn't actually work
+  yet because no real Supabase project has been created — `.env.local` still
+  has placeholder values. Nobody but the repo owner can see the dashboard
+  content until that's done (see "1. Create the Supabase project" above).
+- **Not deployed**: no Vercel project exists yet, so there is no live URL to
+  share. See "2. Deploy to Vercel" above.
+
 ## Known gaps before this is a real Week 3+ deliverable
 
 - Data is hardcoded in `.ts` files, not read from Supabase — fine for a
-  skeleton, but the Week 3 task ("connect the first live data source")
-  means wiring at least one of these to a live table or API.
-- No automated IG/X follower pulls yet (would need each platform's API).
+  skeleton, but the Week 3 playbook task ("connect the first live data
+  source") isn't done until at least one of these is wired to a live table
+  or API. This needs a Supabase project (see above) before it can start.
+- No automated IG/X follower pulls yet (would need a Meta developer app for
+  Instagram Graph API and X API v2 access — both require account setup and
+  approval time beyond what could be done without the owner's credentials).
