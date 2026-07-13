@@ -29,12 +29,20 @@ the `data/*.ts` files.
 
 ## Deploying updates
 
-The site is a static export (`output: "export"` with
-`basePath: "/timidlly-dashboard"` in `next.config.ts`) served by GitHub
-Pages from the `gh-pages` branch. To ship a new version:
+The site is a static export (`output: "export"` in `next.config.ts`)
+served two ways:
+
+- **Vercel**: connect the repo at vercel.com/new and every push to `main`
+  auto-deploys at the domain root. No env vars needed.
+- **GitHub Pages**: served from the `gh-pages` branch under the
+  `/timidlly-dashboard` basePath — that's why the build below sets
+  `GITHUB_PAGES=true` (without it, assets resolve from the root and the
+  Pages site would break; with it on Vercel, the root would 404).
+
+To ship a new version to GitHub Pages:
 
 ```bash
-npm run build            # writes the static site to out/
+GITHUB_PAGES=true npm run build   # writes the static site to out/ (basePath set)
 touch out/.nojekyll      # keeps GitHub Pages from ignoring _next/
 cd out && git init -b gh-pages && git add -A \
   && git commit -m "Deploy" \
@@ -42,8 +50,6 @@ cd out && git init -b gh-pages && git add -A \
 cd .. && rm -rf out/.git
 ```
 
-(If this moves to Vercel or a custom domain later, remove `basePath` and
-drop the manual publish step.)
 
 ## Data
 
@@ -89,8 +95,8 @@ drop the manual publish step.)
 
 - **Code**: complete and building clean (`npm run build` passes, no type
   errors). Fully open — no login, no email allowlist, nothing gating access.
-- **Not deployed**: no Vercel project exists yet, so there is no live URL to
-  share yet. See "Deploy to Vercel" above.
+- **Live** on GitHub Pages at https://hrho26.github.io/timidlly-dashboard/;
+  a Vercel deploy from the same repo also works (serves at the domain root).
 - **Privacy note**: `data/prospects.ts` contains real names, emails, and
   LinkedIn URLs for 69 sponsorship contacts, and both the repo and the
   live dashboard are fully public with no access control. This was a
