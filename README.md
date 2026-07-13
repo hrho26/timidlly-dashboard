@@ -1,66 +1,38 @@
 # Timidlly Media-Kit Dashboard
 
 Media-kit dashboard for the team to track sponsorship readiness: platform
-baseline stats, a lead pipeline scored by pitch fit, and a pricing
-assistant. (No personal deliverable-tracking — this is a shared team tool,
-not an individual task list.)
+baseline stats, a lead pipeline scored by pitch fit, a pricing assistant,
+and a case-study template. Open access — no login required, anyone with
+the link can view it.
 
 Repo: https://github.com/hrho26/timidlly-dashboard (public)
 
 ## Stack
 
 - Next.js 16 (App Router, TypeScript, Tailwind)
-- Supabase (Postgres + email-link auth)
-- Vercel (hosting)
+- Vercel (hosting, once deployed)
+- Supabase client helpers exist (`lib/supabase/`) but aren't wired to
+  anything yet — kept for whenever a real data source replaces the
+  hardcoded `data/*.ts` files. No auth, no login page.
 
 ## Local setup
 
 ```bash
 npm install
-cp .env.local.example .env.local   # then fill in real values, see below
 npm run dev
 ```
 
-Without real Supabase values, the app still runs — you'll land on `/login`
-and see the form render, but sign-in won't work until Supabase is connected.
+No environment variables are required to run this locally — the dashboard
+reads entirely from the `data/*.ts` files.
 
-## 1. Create the Supabase project
-
-1. Go to [supabase.com](https://supabase.com) → New Project.
-2. Once created, go to **Settings → API** and copy:
-   - `Project URL` → `NEXT_PUBLIC_SUPABASE_URL`
-   - `anon public` key → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-3. Paste both into `.env.local`.
-4. In **Authentication → Providers**, confirm "Email" is enabled and
-   "Confirm email" uses a magic link (OTP), which is the default.
-5. In **Authentication → Email Templates → Magic Link**, make sure the link
-   uses `{{ .TokenHash }}` in the `token_hash` query param (Supabase's
-   default template already does this) — that's what
-   `app/auth/confirm/route.ts` expects.
-6. Set `ALLOWED_EMAILS` in `.env.local` to a comma-separated list of every
-   email that should be able to see the dashboard (you, coach, teammates).
-   Leaving it empty allows anyone who signs in — don't ship that to
-   production.
-
-## 2. Deploy to Vercel
+## Deploy to Vercel
 
 1. Go to [vercel.com/new](https://vercel.com/new) and import
    `hrho26/timidlly-dashboard` from GitHub.
-2. In the import screen, add the same three environment variables from
-   `.env.local` (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
-   `ALLOWED_EMAILS`).
-3. Deploy. Vercel gives you a URL like
-   `timidlly-dashboard.vercel.app` — that's the live link to share.
-4. Back in Supabase → **Authentication → URL Configuration**, add that
-   Vercel URL to both "Site URL" and "Redirect URLs" (e.g.
-   `https://timidlly-dashboard.vercel.app/auth/confirm`), or magic links
-   won't redirect correctly in production.
-
-## 3. Invite people
-
-Anyone whose email is in `ALLOWED_EMAILS` can go to the Vercel URL, enter
-their email, and click the magic link sent to their inbox — no separate
-account creation needed.
+2. Deploy — no environment variables needed for the current feature set.
+3. Vercel gives you a URL like `timidlly-dashboard.vercel.app`; that's the
+   public link to share. Anyone who opens it sees the dashboard directly,
+   no sign-in step.
 
 ## Data
 
@@ -96,26 +68,25 @@ account creation needed.
 ## Current status
 
 - **Code**: complete and building clean (`npm run build` passes, no type
-  errors). Auth gate (`proxy.ts` → `lib/supabase/middleware.ts`) is wired up
-  and redirects unauthenticated visitors to `/login`.
-- **Blocked on external accounts, not code**: sign-in doesn't actually work
-  yet because no real Supabase project has been created — `.env.local` still
-  has placeholder values. Nobody but the repo owner can see the dashboard
-  content until that's done (see "1. Create the Supabase project" above).
+  errors). Fully open — no login, no email allowlist, nothing gating access.
 - **Not deployed**: no Vercel project exists yet, so there is no live URL to
-  share. See "2. Deploy to Vercel" above.
+  share yet. See "Deploy to Vercel" above.
+- **Privacy note**: `data/prospects.ts` contains real names, emails, and
+  LinkedIn URLs for 69 sponsorship contacts, and both the repo and (once
+  deployed) the dashboard itself are fully public with no access control.
+  This was a deliberate choice, not an oversight.
 
 ## Playbook status (Weeks 2–8, Conversion/Dashboard track)
 
 | Week | Task | Status |
 |---|---|---|
 | 2 | Dashboard spec + baseline stats | Done |
-| 3 | Dashboard skeleton; connect first live data source | Skeleton done; live connection blocked on a real Supabase project |
+| 3 | Dashboard skeleton; connect first live data source | Skeleton done; no live data source connected yet (no Supabase project or social APIs wired up) |
 | 4 | Dashboard metrics + pricing-assistant logic | Done — CPM calculator in `data/pricing.ts` |
 | 5 | Ship live dashboard; generate first case study | Case-study template done; "ship live" blocked on Vercel deploy |
 | 6 | Embed live proof into funnel; refine pricing | Out of this project's scope — the funnel belongs to a different track's codebase |
 | 7 | QA + finalize pricing assistant + docs | Done — see QA notes below |
-| 8 | Deliver + demo + final report | This README + the final report doc; live demo blocked on the same deploy dependency as Week 5 |
+| 8 | Deliver + demo + final report | This README + the final report doc; live demo blocked on the Vercel deploy |
 
 ### QA notes (Week 7)
 
@@ -124,15 +95,13 @@ account creation needed.
   the pricing calculator's CPM input (including negative and zero — a
   negative-CPM bug that produced a malformed `$-100` display was found and
   fixed by clamping the input to `>= 0`), and the case-study form fields.
-- Not tested: real Supabase sign-in (no project exists yet), real Vercel
-  deploy (same reason), mobile viewport (not checked this pass).
+- Not tested: real Vercel deploy, mobile viewport (not checked this pass).
 
 ## Known gaps
 
-- Data is hardcoded in `.ts` files, not read from Supabase — the Week 3
+- Data is hardcoded in `.ts` files, not read from a database — the Week 3
   playbook task ("connect the first live data source") isn't done until at
-  least one of these is wired to a live table or API. Needs a Supabase
-  project (see above) before it can start.
+  least one of these is wired to a live table or API.
 - No automated IG/X follower pulls yet (would need a Meta developer app for
   Instagram Graph API and X API v2 access — both require account setup and
   approval time beyond what could be done without the owner's credentials).

@@ -1,32 +1,19 @@
-import { createClient } from "@/lib/supabase/server";
 import { PlatformStats } from "@/components/PlatformStats";
 import { LeadPipeline } from "@/components/LeadPipeline";
 import { PricingAssistant } from "@/components/PricingAssistant";
 import { CaseStudyTemplate } from "@/components/CaseStudyTemplate";
-import { SignOutButton } from "@/components/SignOutButton";
 
-export default async function Home() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+export default function Home() {
   return (
     <div className="min-h-screen bg-neutral-950">
       <header className="border-b border-neutral-800 px-6 py-4">
-        <div className="mx-auto flex max-w-6xl items-center justify-between">
-          <div>
-            <h1 className="text-base font-semibold text-white">
-              Timidlly Media-Kit Dashboard
-            </h1>
-            <p className="text-xs text-neutral-500">
-              Conversion track — baseline stats, pricing, case studies, lead pipeline
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-neutral-500">{user?.email}</span>
-            <SignOutButton />
-          </div>
+        <div className="mx-auto max-w-6xl">
+          <h1 className="text-base font-semibold text-white">
+            Timidlly Media-Kit Dashboard
+          </h1>
+          <p className="text-xs text-neutral-500">
+            Conversion track — baseline stats, pricing, case studies, lead pipeline
+          </p>
         </div>
       </header>
 
