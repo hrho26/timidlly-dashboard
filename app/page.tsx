@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { PlatformStats } from "@/components/PlatformStats";
 import { LeadPipeline } from "@/components/LeadPipeline";
 import { PricingAssistant } from "@/components/PricingAssistant";
+import { CaseStudyTemplate } from "@/components/CaseStudyTemplate";
 import { SignOutButton } from "@/components/SignOutButton";
 
 export default async function Home() {
@@ -19,7 +20,7 @@ export default async function Home() {
               Timidlly Media-Kit Dashboard
             </h1>
             <p className="text-xs text-neutral-500">
-              Conversion track — Week 2 baseline + lead pipeline
+              Conversion track — baseline stats, pricing, case studies, lead pipeline
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -32,6 +33,7 @@ export default async function Home() {
       <main className="mx-auto max-w-6xl space-y-6 px-6 py-8">
         <PlatformStats />
         <PricingAssistant />
+        <CaseStudyTemplate />
         <LeadPipeline />
       </main>
     </div>

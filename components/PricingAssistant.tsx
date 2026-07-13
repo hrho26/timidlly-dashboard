@@ -91,7 +91,7 @@ export function PricingAssistant() {
                   step="0.01"
                   min="0"
                   value={cpm}
-                  onChange={(e) => setCpm(Number(e.target.value))}
+                  onChange={(e) => setCpm(Math.max(0, Number(e.target.value) || 0))}
                   className="w-24 rounded-md border border-neutral-700 bg-neutral-900 px-2 py-1 text-right text-xs text-white outline-none focus:border-neutral-500"
                 />
               </div>
