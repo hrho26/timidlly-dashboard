@@ -2,15 +2,17 @@
 
 Media-kit dashboard for the team to track sponsorship readiness: platform
 baseline stats, a lead pipeline scored by pitch fit, a pricing assistant,
-and a case-study template. Open access — no login required, anyone with
-the link can view it.
+a lead scorer, and a case-study template. Open access — no login required,
+anyone with the link can view it.
+
+**Live: https://hrho26.github.io/timidlly-dashboard/**
 
 Repo: https://github.com/hrho26/timidlly-dashboard (public)
 
 ## Stack
 
-- Next.js 16 (App Router, TypeScript, Tailwind)
-- Vercel (hosting, once deployed)
+- Next.js 16 (App Router, TypeScript, Tailwind), static export
+- GitHub Pages (hosting, from the `gh-pages` branch)
 - Supabase client helpers exist (`lib/supabase/`) but aren't wired to
   anything yet — kept for whenever a real data source replaces the
   hardcoded `data/*.ts` files. No auth, no login page.
@@ -22,17 +24,26 @@ npm install
 npm run dev
 ```
 
-No environment variables are required to run this locally — the dashboard
-reads entirely from the `data/*.ts` files.
+No environment variables are required — the dashboard reads entirely from
+the `data/*.ts` files.
 
-## Deploy to Vercel
+## Deploying updates
 
-1. Go to [vercel.com/new](https://vercel.com/new) and import
-   `hrho26/timidlly-dashboard` from GitHub.
-2. Deploy — no environment variables needed for the current feature set.
-3. Vercel gives you a URL like `timidlly-dashboard.vercel.app`; that's the
-   public link to share. Anyone who opens it sees the dashboard directly,
-   no sign-in step.
+The site is a static export (`output: "export"` with
+`basePath: "/timidlly-dashboard"` in `next.config.ts`) served by GitHub
+Pages from the `gh-pages` branch. To ship a new version:
+
+```bash
+npm run build            # writes the static site to out/
+touch out/.nojekyll      # keeps GitHub Pages from ignoring _next/
+cd out && git init -b gh-pages && git add -A \
+  && git commit -m "Deploy" \
+  && git push -f https://github.com/hrho26/timidlly-dashboard.git gh-pages
+cd .. && rm -rf out/.git
+```
+
+(If this moves to Vercel or a custom domain later, remove `basePath` and
+drop the manual publish step.)
 
 ## Data
 
@@ -81,21 +92,21 @@ reads entirely from the `data/*.ts` files.
 - **Not deployed**: no Vercel project exists yet, so there is no live URL to
   share yet. See "Deploy to Vercel" above.
 - **Privacy note**: `data/prospects.ts` contains real names, emails, and
-  LinkedIn URLs for 69 sponsorship contacts, and both the repo and (once
-  deployed) the dashboard itself are fully public with no access control.
-  This was a deliberate choice, not an oversight.
+  LinkedIn URLs for 69 sponsorship contacts, and both the repo and the
+  live dashboard are fully public with no access control. This was a
+  deliberate choice, not an oversight.
 
 ## Playbook status (Weeks 2–8, Conversion/Dashboard track)
 
 | Week | Task | Status |
 |---|---|---|
 | 2 | Dashboard spec + baseline stats | Done |
-| 3 | Dashboard skeleton; connect first live data source | Skeleton done; no live data source connected yet (no Supabase project or social APIs wired up) |
+| 3 | Dashboard skeleton; connect first live data source | Skeleton done and live; no live *data source* connected yet (no Supabase project or social APIs wired up) |
 | 4 | Dashboard metrics + pricing-assistant logic | Done — CPM calculator in `data/pricing.ts` |
-| 5 | Ship live dashboard; generate first case study | Case-study template done; "ship live" blocked on Vercel deploy |
+| 5 | Ship live dashboard; generate first case study | Live at hrho26.github.io/timidlly-dashboard; case-study template done (no real campaign has run, so no filled-in case study yet) |
 | 6 | Embed live proof into funnel; refine pricing | Out of this project's scope — the funnel belongs to a different track's codebase |
 | 7 | QA + finalize pricing assistant + docs | Done — see QA notes below |
-| 8 | Deliver + demo + final report | This README + the final report doc; live demo blocked on the Vercel deploy |
+| 8 | Deliver + demo + final report | Done — live public link, this README, and the final report doc |
 
 ### QA notes (Week 7)
 
@@ -104,16 +115,19 @@ reads entirely from the `data/*.ts` files.
   the pricing calculator's CPM input (including negative and zero — a
   negative-CPM bug that produced a malformed `$-100` display was found and
   fixed by clamping the input to `>= 0`), and the case-study form fields.
-- Not tested: real Vercel deploy, mobile viewport (not checked this pass).
+- The deployed GitHub Pages site was verified interactive (tier filter
+  re-renders correctly on the live URL). Mobile viewport not checked.
 
 ## Known gaps
 
 - Data is hardcoded in `.ts` files, not read from a database — the Week 3
   playbook task ("connect the first live data source") isn't done until at
-  least one of these is wired to a live table or API.
+  least one of these is wired to a live table or API. Note the static
+  GitHub Pages hosting can't run server code, so a live data source would
+  mean client-side fetches (e.g. Supabase from the browser) or moving to
+  Vercel.
 - No automated IG/X follower pulls yet (would need a Meta developer app for
   Instagram Graph API and X API v2 access — both require account setup and
   approval time beyond what could be done without the owner's credentials).
-- Nothing is actually deployed. Every "ship it live" task (Weeks 5, 6, 8)
-  is code-complete but not reachable at a public URL until Vercel is
-  connected.
+- Deploys are manual (see "Deploying updates") — no CI pipeline publishes
+  `gh-pages` automatically on push to `main` yet.
