@@ -1,0 +1,5 @@
+1:"$Sreact.fragment"
+2:I[94209,["/timidlly-dashboard/_next/static/chunks/1hekzzo_bbrb5.js"],"default"]
+3:I[54688,["/timidlly-dashboard/_next/static/chunks/1hekzzo_bbrb5.js"],"default"]
+4:[]
+0:{"rsc":["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]]}],"isPartial":false,"staleTime":300,"varyParams":"$W4","buildId":"v4qISy1FvV1M6m78Nj4hx"}
