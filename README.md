@@ -36,6 +36,15 @@ reads entirely from the `data/*.ts` files.
 
 ## Data
 
+- `data/scoring.ts` + `components/LeadScorer.tsx` — this track's equivalent
+  of Raghav's Pipeline-track lead-gen tool
+  ([lead-gen-v2.onrender.com](https://lead-gen-v2.onrender.com)), which
+  scans Product Hunt/YC, enriches via Apollo/Firecrawl, and has OpenAI
+  compute a 1–10 fit score. This dashboard has no scraper or OpenAI key
+  connected, so sourcing and the three sub-scores (audience overlap,
+  contact quality, urgency) are entered by a person — the tool formalizes
+  the same scoring rule already used by hand for all 69 existing
+  prospects, and outputs a ready-to-paste `data/prospects.ts` entry.
 - `data/prospects.ts` — 69-prospect lead pipeline: 20 from the sales team's
   CSV (uniform "dual_impact" package) plus 49 from the detailed prospect
   docx (Autumn AI through Decagon, each with a real Apollo-sourced contact

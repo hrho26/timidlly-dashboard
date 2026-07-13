@@ -1,5 +1,6 @@
 import { PlatformStats } from "@/components/PlatformStats";
 import { LeadPipeline } from "@/components/LeadPipeline";
+import { LeadScorer } from "@/components/LeadScorer";
 import { PricingAssistant } from "@/components/PricingAssistant";
 import { CaseStudyTemplate } from "@/components/CaseStudyTemplate";
 
@@ -21,6 +22,7 @@ export default function Home() {
         <PlatformStats />
         <PricingAssistant />
         <CaseStudyTemplate />
+        <LeadScorer />
         <LeadPipeline />
       </main>
     </div>

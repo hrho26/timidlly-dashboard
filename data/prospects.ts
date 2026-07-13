@@ -16,7 +16,7 @@ export interface Prospect {
   recommendedPackage: string;
   score: number;
   tier: Tier;
-  source: "csv" | "docx";
+  source: "csv" | "docx" | "manual";
   warm: boolean; // has an existing relationship (e.g. Devrath already in contact)
   notes: string;
 }
